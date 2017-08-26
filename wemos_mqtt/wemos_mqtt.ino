@@ -27,8 +27,11 @@ void setup() {
   mqtt.onMessage(messageReceived);
 
   connect();
-  Serial.println("Setup completed...");
+  
   pinMode(relayPin, OUTPUT);
+  
+  Serial.println("Setup completed...");
+  
 }
 
 void loop() {
