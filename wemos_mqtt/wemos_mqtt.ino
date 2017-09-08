@@ -1,11 +1,8 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <MQTTClient.h>
+#include "passwords.h"
 
-
-const char* host = "192.168.178.157";
-const char* ssid = "*******";
-const char* password = "************";
 
 const int relayPin = D1;
 
@@ -20,6 +17,8 @@ void setup() {
   Serial.println();
   Serial.println("Booting...");
 
+  pinMode(relayPin, OUTPUT);
+
   WiFi.mode(WIFI_AP_STA);
   WiFi.begin(ssid, password);
 
@@ -27,11 +26,8 @@ void setup() {
   mqtt.onMessage(messageReceived);
 
   connect();
-  
-  pinMode(relayPin, OUTPUT);
-  
   Serial.println("Setup completed...");
-  
+
 }
 
 void loop() {
@@ -64,7 +60,8 @@ void connect() {
   mqtt.subscribe("/pumpe/cmd/");
 
   mqtt.publish("/pumpe/status/", "bin da!");
-  
+  mqtt.publish("/pumpe/status/", "false");
+
 }
 
 void messageReceived(String &topic, String &payload) {
@@ -80,7 +77,5 @@ void messageReceived(String &topic, String &payload) {
     digitalWrite(relayPin, LOW);
     mqtt.publish("/pumpe/status/", "false");
   };
-  
+
   }
-
-
